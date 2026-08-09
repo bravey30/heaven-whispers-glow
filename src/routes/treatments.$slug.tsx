@@ -79,7 +79,7 @@ function TreatmentDetail() {
           <Reveal>
             <h2 className="eyebrow">What it includes</h2>
             <ul className="mt-8 border-t border-border-gold">
-              {treatment.includes.map((item) => (
+              {treatment.includes.map((item: string) => (
                 <li key={item} className="border-b border-border-gold py-5 text-lg">
                   {item}
                 </li>
@@ -89,7 +89,7 @@ function TreatmentDetail() {
           <Reveal delay={120}>
             <h2 className="eyebrow">Ideal for</h2>
             <ul className="mt-8 border-t border-border-gold">
-              {treatment.idealFor.map((item) => (
+              {treatment.idealFor.map((item: string) => (
                 <li key={item} className="border-b border-border-gold py-5 text-lg">
                   {item}
                 </li>
