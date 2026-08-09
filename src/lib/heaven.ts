@@ -167,5 +167,5 @@ export const goals = [
 ] as const;
 
 export function recommendFor(goal: string): Treatment {
-  return treatments.find((t) => t.goals.includes(goal)) ?? treatments[1];
+  return treatments.find((t) => t.goals.includes(goal)) ?? treatments[1]!;
 }
