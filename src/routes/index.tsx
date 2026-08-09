@@ -246,7 +246,7 @@ function Explorer() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/40 to-transparent" />
                 <div className="absolute inset-x-0 bottom-0 p-10 text-ink-foreground">
-                  <h3 className="display text-5xl tracking-[0.06em] uppercase">{cat.label}</h3>
+                  <h3 className="display text-[clamp(2rem,3vw,3rem)] tracking-[0.04em] uppercase">{cat.label}</h3>
                   <p className="mt-3 text-xs tracking-[0.2em] text-ink-foreground/70 uppercase">
                     {cat.sub}
                   </p>
