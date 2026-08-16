@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useLocation } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Wordmark } from "./Wordmark";
 
@@ -13,6 +13,8 @@ const nav = [
 export function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const location = useLocation();
+  const isHome = location.pathname === "/";
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -31,7 +33,7 @@ export function Header() {
     >
       <div className="mx-auto flex max-w-[1400px] items-center justify-between px-6 py-5 lg:px-12">
         <Link to="/" onClick={() => setOpen(false)}>
-          <Wordmark />
+          <Wordmark tone={scrolled ? "light" : "gold"} />
         </Link>
 
         <nav className="hidden items-center gap-10 lg:flex">
@@ -39,7 +41,11 @@ export function Header() {
             <Link
               key={item.to}
               to={item.to}
-              className="link-gold text-[0.7rem] font-medium tracking-[0.22em] text-ink-foreground/80 uppercase transition-colors hover:text-gold"
+              className={`link-gold text-[0.7rem] font-medium tracking-[0.22em] uppercase transition-colors ${
+                scrolled
+                  ? "text-ink-foreground/80 hover:text-gold"
+                  : "text-gold hover:text-gold-soft"
+              }`}
               activeProps={{ className: "text-gold" }}
             >
               {item.label}

@@ -38,8 +38,12 @@ function ContactPage() {
 
           <div className="mt-16 space-y-6 border-t border-border-gold pt-10 text-sm text-ink-foreground/70">
             <p>
-              <span className="eyebrow block">Studio</span>
-              <span className="mt-2 block">Dar es Salaam, Tanzania</span>
+              <span className="eyebrow block">Studio Location</span>
+              <span className="mt-2 block">
+                AVE MARIA SAUNA,<br />
+                Near Kamwana Express HQ, Ilazo,<br />
+                Dodoma, Tanzania
+              </span>
             </p>
             <p>
               <span className="eyebrow block">Phone & WhatsApp</span>
@@ -51,6 +55,16 @@ function ContactPage() {
               <span className="eyebrow block">Hours</span>
               <span className="mt-2 block">Mon – Sat · 09:00 – 19:00</span>
             </p>
+            <div className="pt-2">
+              <a
+                href="https://www.google.com/maps/place/AVE+MARIA+SAUNA,+near+Kamwana+Express+HQ,+Ilazo,+Dodoma/@-6.158844,35.7969304,15z/data=!4m3!3m2!1s0x184de5acd4420dc5:0xf69fc57377f3f8a1!16s%2Fg%2F11y3xkjq4h"
+                target="_blank"
+                rel="noreferrer"
+                className="text-[0.65rem] tracking-[0.2em] text-gold uppercase hover:underline"
+              >
+
+              </a>
+            </div>
           </div>
         </Reveal>
 
@@ -103,6 +117,20 @@ function ContactPage() {
             </form>
           )}
         </Reveal>
+      </section>
+
+      <section className="w-full mt-24 mb-0 pb-0 p-0 m-0">
+        <iframe
+          title="Heaven Aesthetics Location - AVE MARIA SAUNA"
+          src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3963.2625121307615!2d35.7969304!3d-6.158844!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x184de5acd4420dc5%3A0xf69fc57377f3f8a1!2sAVE%20MARIA%20SAUNA!5e0!3m2!1sen!2stz!4v1723677000000!5m2!1sen!2stz"
+          width="100%"
+          height="450"
+          style={{ border: 0 }}
+          allowFullScreen={true}
+          loading="lazy"
+          referrerPolicy="no-referrer-when-downgrade"
+          className="opacity-80 transition-opacity duration-300 hover:opacity-100 w-full block border-0"
+        />
       </section>
     </main>
   );
