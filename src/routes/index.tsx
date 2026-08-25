@@ -17,7 +17,7 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Premium aesthetics and skin wellness. Personalized facials, advanced treatments, lash and brow artistry and body care in Dar es Salaam.",
+          "Premium aesthetics and skin wellness. Personalized facials, advanced treatments, lash and brow artistry and body care in Dodoma.",
       },
       { property: "og:title", content: "Heaven Aesthetics — Healthy Skin. Elevated Beauty." },
       {

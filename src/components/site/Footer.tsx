@@ -49,16 +49,16 @@ export function Footer() {
                 </a>
               </li>
               <li>
-                <a href="https://wa.me/255700000000" className="link-gold transition-colors hover:text-gold">
+                <a href="https://wa.me/255797868749" className="link-gold transition-colors hover:text-gold">
                   WhatsApp
                 </a>
               </li>
               <li>
-                <a href="tel:+255700000000" className="link-gold transition-colors hover:text-gold">
-                  +255 700 000 000
+                <a href="tel:+255797868749" className="link-gold transition-colors hover:text-gold">
+                  +255 797 868 749
                 </a>
               </li>
-              <li>Dar es Salaam, Tanzania</li>
+              <li>Dodoma, Tanzania</li>
             </ul>
           </div>
         </div>

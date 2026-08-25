@@ -10,7 +10,7 @@ export const Route = createFileRoute("/contact")({
       {
         name: "description",
         content:
-          "Book your Heaven Aesthetics appointment in Dar es Salaam. Share your goals and we'll plan your skin journey.",
+          "Book your Heaven Aesthetics appointment in Dodoma. Share your goals and we'll plan your skin journey.",
       },
       { property: "og:title", content: "Book an Appointment — Heaven Aesthetics" },
       {
@@ -47,8 +47,8 @@ function ContactPage() {
             </p>
             <p>
               <span className="eyebrow block">Phone & WhatsApp</span>
-              <a href="tel:+255700000000" className="mt-2 block link-gold hover:text-gold">
-                +255 700 000 000
+              <a href="tel:+255797868749" className="mt-2 block link-gold hover:text-gold">
+                +255 797 868 749
               </a>
             </p>
             <p>
@@ -57,7 +57,7 @@ function ContactPage() {
             </p>
             <div className="pt-2">
               <a
-                href="https://www.google.com/maps/place/AVE+MARIA+SAUNA,+near+Kamwana+Express+HQ,+Ilazo,+Dodoma/@-6.158844,35.7969304,15z/data=!4m3!3m2!1s0x184de5acd4420dc5:0xf69fc57377f3f8a1!16s%2Fg%2F11y3xkjq4h"
+                href="https://maps.app.goo.gl/arXcTKGJNQp91dst7"
                 target="_blank"
                 rel="noreferrer"
                 className="text-[0.65rem] tracking-[0.2em] text-gold uppercase hover:underline"
@@ -121,8 +121,8 @@ function ContactPage() {
 
       <section className="w-full mt-24 mb-0 pb-0 p-0 m-0">
         <iframe
-          title="Heaven Aesthetics Location - AVE MARIA SAUNA"
-          src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3963.2625121307615!2d35.7969304!3d-6.158844!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x184de5acd4420dc5%3A0xf69fc57377f3f8a1!2sAVE%20MARIA%20SAUNA!5e0!3m2!1sen!2stz!4v1723677000000!5m2!1sen!2stz"
+          title="Heaven Aesthetics Beauty Location"
+          src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3963.2625121307615!2d35.7969896!3d-6.157707!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x184de5d0759046ed%3A0x269e60adb30ceb00!2sHeaven%20Aesthetics%20Beauty!5e0!3m2!1sen!2stz!4v1723677000000!5m2!1sen!2stz"
           width="100%"
           height="450"
           style={{ border: 0 }}
