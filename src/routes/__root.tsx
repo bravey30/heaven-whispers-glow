@@ -13,6 +13,8 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Header } from "../components/site/Header";
 import { Footer } from "../components/site/Footer";
+import { CartProvider } from "../lib/cart";
+import { Toaster } from "../components/ui/sonner";
 
 function NotFoundComponent() {
   return (
@@ -117,10 +119,23 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <Header />
-      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <Outlet />
-      <Footer />
+      <CartProvider>
+        <Header />
+        {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+        <Outlet />
+        <Footer />
+        <Toaster
+          theme="dark"
+          position="bottom-center"
+          toastOptions={{
+            classNames: {
+              toast:
+                "group toast !bg-ink !text-ink-foreground !border !border-border-gold !rounded-none",
+              description: "!text-ink-foreground/60",
+            },
+          }}
+        />
+      </CartProvider>
     </QueryClientProvider>
   );
 }

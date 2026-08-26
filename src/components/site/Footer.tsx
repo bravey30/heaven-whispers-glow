@@ -4,7 +4,7 @@ export function Footer() {
   return (
     <footer className="bg-ink text-ink-foreground">
       <div className="mx-auto max-w-[1400px] px-6 py-24 lg:px-12">
-        <div className="grid gap-16 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
+        <div className="grid gap-16 lg:grid-cols-[1.3fr_0.9fr_0.9fr_0.9fr_0.9fr]">
           <div>
             <span className="display block text-4xl tracking-[0.16em]">HEAVEN</span>
             <span className="mt-2 block text-[0.6rem] font-medium tracking-[0.5em] opacity-70">
@@ -19,6 +19,7 @@ export function Footer() {
             title="Explore"
             links={[
               { label: "Treatments", to: "/treatments" },
+              { label: "Shop", to: "/shop" },
               { label: "About", to: "/about" },
               { label: "Experience", to: "/experience" },
               { label: "Journal", to: "/journal" },
@@ -32,6 +33,15 @@ export function Footer() {
               { label: "Advanced Aesthetics", to: "/treatments" },
               { label: "Lashes & Brows", to: "/treatments" },
               { label: "Body Care", to: "/treatments" },
+            ]}
+          />
+          <FooterColumn
+            title="Shop"
+            links={[
+              { label: "Cleansers", to: "/shop" },
+              { label: "Masks", to: "/shop" },
+              { label: "Serums & Treatments", to: "/shop" },
+              { label: "Moisturizers", to: "/shop" },
             ]}
           />
 

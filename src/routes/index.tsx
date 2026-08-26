@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { Reveal } from "../components/site/Reveal";
 import { categories, goals, recommendFor, treatments } from "../lib/heaven";
+import { products } from "../lib/shop";
 import hero from "../assets/hero.jpg";
 import advanced from "../assets/advanced.jpg";
 import interior from "../assets/interior.jpg";
@@ -72,6 +73,7 @@ function Index() {
       <Finder />
       <ExperienceSection />
       <AdvancedSection />
+      <ShopTeaser />
       <Results />
       <Rituals />
       <Bridal />
@@ -390,6 +392,42 @@ function AdvancedSection() {
           <div className="mt-12">
             <Link to="/treatments" className="btn-gold">
               Explore Advanced Aesthetics →
+            </Link>
+          </div>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
+function ShopTeaser() {
+  const featured = products.slice(0, 4);
+
+  return (
+    <section className="bg-background py-32">
+      <div className="mx-auto grid max-w-[1400px] items-center gap-16 px-6 lg:grid-cols-2 lg:px-12">
+        <Reveal className="grid grid-cols-2 gap-4">
+          {featured.map((p) => (
+            <div
+              key={p.slug}
+              className="img-zoom flex aspect-square items-center justify-center border border-border-gold bg-ink"
+            >
+              <span className="display text-6xl text-gold/60">{p.name.charAt(0)}</span>
+            </div>
+          ))}
+        </Reveal>
+        <Reveal delay={140}>
+          <p className="eyebrow">Continue your journey</p>
+          <h2 className="display mt-8 text-5xl md:text-7xl">
+            Bring Heaven <span className="italic">home.</span>
+          </h2>
+          <p className="mt-8 max-w-md leading-relaxed text-muted-foreground">
+            The same cleansers, masks and serums used in your treatments — curated for your
+            routine between visits.
+          </p>
+          <div className="mt-12">
+            <Link to="/shop" className="btn-gold">
+              Shop Home Care →
             </Link>
           </div>
         </Reveal>

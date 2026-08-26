@@ -11,9 +11,12 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
+import { Route as CartRouteImport } from './routes/cart'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as ExperienceRouteImport } from './routes/experience'
 import { Route as JournalRouteImport } from './routes/journal'
+import { Route as ShopIndexRouteImport } from './routes/shop.index'
+import { Route as ShopSlugRouteImport } from './routes/shop.$slug'
 import { Route as TreatmentsIndexRouteImport } from './routes/treatments.index'
 import { Route as TreatmentsSlugRouteImport } from './routes/treatments.$slug'
 
@@ -25,6 +28,11 @@ const IndexRoute = IndexRouteImport.update({
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CartRoute = CartRouteImport.update({
+  id: '/cart',
+  path: '/cart',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContactRoute = ContactRouteImport.update({
@@ -42,6 +50,16 @@ const JournalRoute = JournalRouteImport.update({
   path: '/journal',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ShopIndexRoute = ShopIndexRouteImport.update({
+  id: '/shop/',
+  path: '/shop/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ShopSlugRoute = ShopSlugRouteImport.update({
+  id: '/shop/$slug',
+  path: '/shop/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TreatmentsIndexRoute = TreatmentsIndexRouteImport.update({
   id: '/treatments/',
   path: '/treatments/',
@@ -56,29 +74,38 @@ const TreatmentsSlugRoute = TreatmentsSlugRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/cart': typeof CartRoute
   '/contact': typeof ContactRoute
   '/experience': typeof ExperienceRoute
   '/journal': typeof JournalRoute
+  '/shop/$slug': typeof ShopSlugRoute
   '/treatments/$slug': typeof TreatmentsSlugRoute
+  '/shop/': typeof ShopIndexRoute
   '/treatments/': typeof TreatmentsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/cart': typeof CartRoute
   '/contact': typeof ContactRoute
   '/experience': typeof ExperienceRoute
   '/journal': typeof JournalRoute
+  '/shop/$slug': typeof ShopSlugRoute
   '/treatments/$slug': typeof TreatmentsSlugRoute
+  '/shop': typeof ShopIndexRoute
   '/treatments': typeof TreatmentsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/cart': typeof CartRoute
   '/contact': typeof ContactRoute
   '/experience': typeof ExperienceRoute
   '/journal': typeof JournalRoute
+  '/shop/$slug': typeof ShopSlugRoute
   '/treatments/$slug': typeof TreatmentsSlugRoute
+  '/shop/': typeof ShopIndexRoute
   '/treatments/': typeof TreatmentsIndexRoute
 }
 export interface FileRouteTypes {
@@ -86,38 +113,50 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
+    | '/cart'
     | '/contact'
     | '/experience'
     | '/journal'
+    | '/shop/$slug'
     | '/treatments/$slug'
+    | '/shop/'
     | '/treatments/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/about'
+    | '/cart'
     | '/contact'
     | '/experience'
     | '/journal'
+    | '/shop/$slug'
     | '/treatments/$slug'
+    | '/shop'
     | '/treatments'
   id:
     | '__root__'
     | '/'
     | '/about'
+    | '/cart'
     | '/contact'
     | '/experience'
     | '/journal'
+    | '/shop/$slug'
     | '/treatments/$slug'
+    | '/shop/'
     | '/treatments/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  CartRoute: typeof CartRoute
   ContactRoute: typeof ContactRoute
   ExperienceRoute: typeof ExperienceRoute
   JournalRoute: typeof JournalRoute
+  ShopSlugRoute: typeof ShopSlugRoute
   TreatmentsSlugRoute: typeof TreatmentsSlugRoute
+  ShopIndexRoute: typeof ShopIndexRoute
   TreatmentsIndexRoute: typeof TreatmentsIndexRoute
 }
 
@@ -135,6 +174,13 @@ declare module '@tanstack/react-router' {
       path: '/about'
       fullPath: '/about'
       preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cart': {
+      id: '/cart'
+      path: '/cart'
+      fullPath: '/cart'
+      preLoaderRoute: typeof CartRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contact': {
@@ -158,6 +204,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof JournalRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/shop/': {
+      id: '/shop/'
+      path: '/shop'
+      fullPath: '/shop/'
+      preLoaderRoute: typeof ShopIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/shop/$slug': {
+      id: '/shop/$slug'
+      path: '/shop/$slug'
+      fullPath: '/shop/$slug'
+      preLoaderRoute: typeof ShopSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/treatments/': {
       id: '/treatments/'
       path: '/treatments'
@@ -178,10 +238,13 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  CartRoute: CartRoute,
   ContactRoute: ContactRoute,
   ExperienceRoute: ExperienceRoute,
   JournalRoute: JournalRoute,
+  ShopSlugRoute: ShopSlugRoute,
   TreatmentsSlugRoute: TreatmentsSlugRoute,
+  ShopIndexRoute: ShopIndexRoute,
   TreatmentsIndexRoute: TreatmentsIndexRoute,
 }
 export const routeTree = rootRouteImport
