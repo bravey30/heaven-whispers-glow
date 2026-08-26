@@ -76,7 +76,9 @@ function TreatmentsPage() {
           return (
             <section key={cat.key} className="grid gap-16 lg:grid-cols-[1fr_1.4fr] lg:items-start">
               {/* Category Image Column */}
-              <div className={`img-zoom relative h-[50vh] min-h-[380px] w-full lg:h-[70vh] ${!isEven ? "lg:order-2" : ""}`}>
+              <div
+                className={`img-zoom relative h-[50vh] min-h-[380px] w-full lg:sticky lg:top-32 lg:h-[70vh] ${!isEven ? "lg:order-2" : ""}`}
+              >
                 <img
                   src={images[cat.key]}
                   alt={cat.label}

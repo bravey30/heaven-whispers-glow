@@ -378,7 +378,7 @@ function AdvancedSection() {
             <span className="italic">Thoughtfully delivered.</span>
           </h2>
           <ul className="mt-12 border-t border-border-gold">
-            {["Microneedling", "Carbon Laser", "Chemical Peels"].map((item) => (
+            {["Microneedling", "Carbon Laser", "Peels", "SWICH Anti-Aging"].map((item) => (
               <li
                 key={item}
                 className="border-b border-border-gold py-5 text-lg text-ink-foreground/80"

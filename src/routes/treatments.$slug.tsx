@@ -52,9 +52,6 @@ function TreatmentDetail() {
             <p className="eyebrow">{treatment.name}</p>
             <h1 className="display mt-6 text-6xl md:text-8xl">{treatment.signature}</h1>
             <p className="mt-8 text-lg text-gold">{treatment.price}</p>
-            <p className="mt-8 max-w-md leading-relaxed text-ink-foreground/60">
-              {treatment.summary}
-            </p>
             <div className="mt-12">
               <Link to="/contact" className="btn-gold">
                 Book {treatment.signature} →
@@ -75,7 +72,12 @@ function TreatmentDetail() {
       </section>
 
       <section className="mx-auto max-w-[1400px] px-6 py-28 lg:px-12">
-        <div className="grid gap-16 md:grid-cols-2">
+        <Reveal>
+          <p className="max-w-2xl text-lg leading-relaxed text-muted-foreground">
+            {treatment.summary}
+          </p>
+        </Reveal>
+        <div className="mt-16 grid gap-16 md:grid-cols-2">
           <Reveal>
             <h2 className="eyebrow">What it includes</h2>
             <ul className="mt-8 border-t border-border-gold">
