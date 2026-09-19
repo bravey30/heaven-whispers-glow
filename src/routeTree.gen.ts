@@ -11,10 +11,13 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
+import { Route as BookRouteImport } from './routes/book'
 import { Route as CartRouteImport } from './routes/cart'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as ExperienceRouteImport } from './routes/experience'
 import { Route as JournalRouteImport } from './routes/journal'
+import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as AdminLoginRouteImport } from './routes/admin.login'
 import { Route as ShopIndexRouteImport } from './routes/shop.index'
 import { Route as ShopSlugRouteImport } from './routes/shop.$slug'
 import { Route as TreatmentsIndexRouteImport } from './routes/treatments.index'
@@ -28,6 +31,11 @@ const IndexRoute = IndexRouteImport.update({
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BookRoute = BookRouteImport.update({
+  id: '/book',
+  path: '/book',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CartRoute = CartRouteImport.update({
@@ -48,6 +56,16 @@ const ExperienceRoute = ExperienceRouteImport.update({
 const JournalRoute = JournalRouteImport.update({
   id: '/journal',
   path: '/journal',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/admin/',
+  path: '/admin/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminLoginRoute = AdminLoginRouteImport.update({
+  id: '/admin/login',
+  path: '/admin/login',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ShopIndexRoute = ShopIndexRouteImport.update({
@@ -74,24 +92,30 @@ const TreatmentsSlugRoute = TreatmentsSlugRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/book': typeof BookRoute
   '/cart': typeof CartRoute
   '/contact': typeof ContactRoute
   '/experience': typeof ExperienceRoute
   '/journal': typeof JournalRoute
+  '/admin/login': typeof AdminLoginRoute
   '/shop/$slug': typeof ShopSlugRoute
   '/treatments/$slug': typeof TreatmentsSlugRoute
+  '/admin/': typeof AdminIndexRoute
   '/shop/': typeof ShopIndexRoute
   '/treatments/': typeof TreatmentsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/book': typeof BookRoute
   '/cart': typeof CartRoute
   '/contact': typeof ContactRoute
   '/experience': typeof ExperienceRoute
   '/journal': typeof JournalRoute
+  '/admin/login': typeof AdminLoginRoute
   '/shop/$slug': typeof ShopSlugRoute
   '/treatments/$slug': typeof TreatmentsSlugRoute
+  '/admin': typeof AdminIndexRoute
   '/shop': typeof ShopIndexRoute
   '/treatments': typeof TreatmentsIndexRoute
 }
@@ -99,12 +123,15 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/book': typeof BookRoute
   '/cart': typeof CartRoute
   '/contact': typeof ContactRoute
   '/experience': typeof ExperienceRoute
   '/journal': typeof JournalRoute
+  '/admin/login': typeof AdminLoginRoute
   '/shop/$slug': typeof ShopSlugRoute
   '/treatments/$slug': typeof TreatmentsSlugRoute
+  '/admin/': typeof AdminIndexRoute
   '/shop/': typeof ShopIndexRoute
   '/treatments/': typeof TreatmentsIndexRoute
 }
@@ -113,36 +140,45 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
+    | '/book'
     | '/cart'
     | '/contact'
     | '/experience'
     | '/journal'
+    | '/admin/login'
     | '/shop/$slug'
     | '/treatments/$slug'
+    | '/admin/'
     | '/shop/'
     | '/treatments/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/about'
+    | '/book'
     | '/cart'
     | '/contact'
     | '/experience'
     | '/journal'
+    | '/admin/login'
     | '/shop/$slug'
     | '/treatments/$slug'
+    | '/admin'
     | '/shop'
     | '/treatments'
   id:
     | '__root__'
     | '/'
     | '/about'
+    | '/book'
     | '/cart'
     | '/contact'
     | '/experience'
     | '/journal'
+    | '/admin/login'
     | '/shop/$slug'
     | '/treatments/$slug'
+    | '/admin/'
     | '/shop/'
     | '/treatments/'
   fileRoutesById: FileRoutesById
@@ -150,12 +186,15 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  BookRoute: typeof BookRoute
   CartRoute: typeof CartRoute
   ContactRoute: typeof ContactRoute
   ExperienceRoute: typeof ExperienceRoute
   JournalRoute: typeof JournalRoute
+  AdminLoginRoute: typeof AdminLoginRoute
   ShopSlugRoute: typeof ShopSlugRoute
   TreatmentsSlugRoute: typeof TreatmentsSlugRoute
+  AdminIndexRoute: typeof AdminIndexRoute
   ShopIndexRoute: typeof ShopIndexRoute
   TreatmentsIndexRoute: typeof TreatmentsIndexRoute
 }
@@ -174,6 +213,13 @@ declare module '@tanstack/react-router' {
       path: '/about'
       fullPath: '/about'
       preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/book': {
+      id: '/book'
+      path: '/book'
+      fullPath: '/book'
+      preLoaderRoute: typeof BookRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/cart': {
@@ -202,6 +248,20 @@ declare module '@tanstack/react-router' {
       path: '/journal'
       fullPath: '/journal'
       preLoaderRoute: typeof JournalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/': {
+      id: '/admin/'
+      path: '/admin'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/login': {
+      id: '/admin/login'
+      path: '/admin/login'
+      fullPath: '/admin/login'
+      preLoaderRoute: typeof AdminLoginRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/shop/': {
@@ -238,12 +298,15 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  BookRoute: BookRoute,
   CartRoute: CartRoute,
   ContactRoute: ContactRoute,
   ExperienceRoute: ExperienceRoute,
   JournalRoute: JournalRoute,
+  AdminLoginRoute: AdminLoginRoute,
   ShopSlugRoute: ShopSlugRoute,
   TreatmentsSlugRoute: TreatmentsSlugRoute,
+  AdminIndexRoute: AdminIndexRoute,
   ShopIndexRoute: ShopIndexRoute,
   TreatmentsIndexRoute: TreatmentsIndexRoute,
 }

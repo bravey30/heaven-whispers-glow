@@ -1,7 +1,5 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { Reveal } from "../components/site/Reveal";
-import { treatments } from "../lib/heaven";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -23,8 +21,6 @@ export const Route = createFileRoute("/contact")({
 });
 
 function ContactPage() {
-  const [sent, setSent] = useState(false);
-
   return (
     <main className="bg-ink pt-32 text-ink-foreground">
       <section className="mx-auto grid max-w-[1400px] gap-20 px-6 py-24 lg:grid-cols-2 lg:px-12">
@@ -69,53 +65,17 @@ function ContactPage() {
         </Reveal>
 
         <Reveal delay={140}>
-          {sent ? (
-            <div className="border border-border-gold p-12">
-              <p className="eyebrow">Received</p>
-              <h2 className="display mt-6 text-4xl">Thank you.</h2>
-              <p className="mt-4 text-sm text-ink-foreground/60">
-                We'll be in touch shortly to confirm your appointment.
-              </p>
-            </div>
-          ) : (
-            <form
-              className="space-y-8"
-              onSubmit={(e) => {
-                e.preventDefault();
-                setSent(true);
-              }}
-            >
-              <Field label="Name" name="name" />
-              <Field label="Phone" name="phone" type="tel" />
-              <Field label="Email" name="email" type="email" required={false} />
-              <label className="block">
-                <span className="eyebrow">Treatment of interest</span>
-                <select
-                  name="treatment"
-                  className="mt-4 w-full border-b border-border-gold bg-transparent pb-3 text-sm text-ink-foreground outline-none focus:border-gold"
-                >
-                  <option className="bg-ink">No preference — advise me</option>
-                  {treatments.map((t) => (
-                    <option key={t.slug} className="bg-ink">
-                      {t.signature} · {t.name}
-                    </option>
-                  ))}
-                </select>
-              </label>
-              <label className="block">
-                <span className="eyebrow">Your skin goals</span>
-                <textarea
-                  name="message"
-                  rows={4}
-                  className="mt-4 w-full resize-none border-b border-border-gold bg-transparent pb-3 text-sm text-ink-foreground outline-none placeholder:text-ink-foreground/30 focus:border-gold"
-                  placeholder="Tell us what you'd like to work on."
-                />
-              </label>
-              <button type="submit" className="btn-gold">
-                Book an Appointment →
-              </button>
-            </form>
-          )}
+          <div className="border border-border-gold p-12">
+            <p className="eyebrow">Ready when you are</p>
+            <h2 className="display mt-6 text-4xl">Book your visit.</h2>
+            <p className="mt-4 text-sm text-ink-foreground/60">
+              Choose your treatment, pick a time, and tell us about your skin — all in one
+              place.
+            </p>
+            <Link to="/book" className="btn-gold mt-8 inline-flex">
+              Book an Appointment →
+            </Link>
+          </div>
         </Reveal>
       </section>
 
@@ -133,29 +93,5 @@ function ContactPage() {
         />
       </section>
     </main>
-  );
-}
-
-function Field({
-  label,
-  name,
-  type = "text",
-  required = true,
-}: {
-  label: string;
-  name: string;
-  type?: string;
-  required?: boolean;
-}) {
-  return (
-    <label className="block">
-      <span className="eyebrow">{label}</span>
-      <input
-        name={name}
-        type={type}
-        required={required}
-        className="mt-4 w-full border-b border-border-gold bg-transparent pb-3 text-sm text-ink-foreground outline-none focus:border-gold"
-      />
-    </label>
   );
 }

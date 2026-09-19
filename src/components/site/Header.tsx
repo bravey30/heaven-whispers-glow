@@ -60,7 +60,7 @@ export function Header() {
           <CartLink scrolled={scrolled} onNavigate={() => setOpen(false)} />
 
           <div className="hidden lg:block">
-            <Link to="/contact" className="btn-gold">
+            <Link to="/book" className="btn-gold">
               Book Appointment
             </Link>
           </div>
@@ -98,7 +98,7 @@ export function Header() {
               {item.label}
             </Link>
           ))}
-          <Link to="/contact" onClick={() => setOpen(false)} className="btn-gold mt-4 self-start">
+          <Link to="/book" onClick={() => setOpen(false)} className="btn-gold mt-4 self-start">
             Book Appointment
           </Link>
         </nav>
