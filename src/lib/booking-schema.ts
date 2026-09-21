@@ -45,7 +45,8 @@ export const bookingSchema = z.object({
   currentMedication: z.string().trim().optional(),
   pregnancyStatus: z.enum(pregnancyStatuses).optional(),
   notes: z.string().trim().optional(),
-  paymentReference: z.string().trim().optional(),
+  paymentAccountProvider: z.string().trim().optional(),
+  paymentSenderName: z.string().trim().optional(),
 });
 
 export type BookingInput = z.infer<typeof bookingSchema>;
@@ -75,5 +76,6 @@ export type Appointment = {
   allergies: string | null;
   current_medication: string | null;
   pregnancy_status: string | null;
-  payment_reference: string | null;
+  payment_account: string | null;
+  payment_sender_name: string | null;
 };

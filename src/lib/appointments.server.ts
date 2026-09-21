@@ -70,7 +70,8 @@ export const submitAppointment = createServerFn({ method: "POST" })
         allergies: data.allergies ?? null,
         current_medication: data.currentMedication ?? null,
         pregnancy_status: data.pregnancyStatus ?? null,
-        payment_reference: data.paymentReference ?? null,
+        payment_account: data.paymentAccountProvider ?? null,
+        payment_sender_name: data.paymentSenderName ?? null,
       })
       .select()
       .single();

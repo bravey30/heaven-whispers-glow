@@ -18,9 +18,10 @@ export function ConfirmStep({ values }: { values: BookingInput }) {
         {values.email && <SummaryRow label="Email" value={values.email} />}
         <SummaryRow label="Main concern" value={values.mainConcern} />
       </div>
-      {values.paymentReference && (
+      {(values.paymentAccountProvider || values.paymentSenderName) && (
         <div className="border border-border p-6">
-          <SummaryRow label="Payment reference" value={values.paymentReference} />
+          <SummaryRow label="Paid to" value={values.paymentAccountProvider} />
+          <SummaryRow label="Sender name" value={values.paymentSenderName} />
         </div>
       )}
       <p className="text-xs text-muted-foreground">

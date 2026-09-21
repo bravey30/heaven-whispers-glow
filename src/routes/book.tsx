@@ -62,7 +62,8 @@ function BookPage() {
       allergies: "",
       currentMedication: "",
       notes: "",
-      paymentReference: "",
+      paymentAccountProvider: "",
+      paymentSenderName: "",
     },
   });
 

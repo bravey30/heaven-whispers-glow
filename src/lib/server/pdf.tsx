@@ -80,10 +80,11 @@ function AppointmentDocument({ appt }: { appt: Appointment }) {
           <Row label="Pregnant / breastfeeding" value={appt.pregnancy_status} />
         </View>
 
-        {appt.payment_reference ? (
+        {appt.payment_account || appt.payment_sender_name ? (
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Payment</Text>
-            <Row label="Reference" value={appt.payment_reference} />
+            <Row label="Paid to" value={appt.payment_account} />
+            <Row label="Sender name" value={appt.payment_sender_name} />
           </View>
         ) : null}
 

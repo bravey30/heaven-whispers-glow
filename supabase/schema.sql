@@ -37,7 +37,8 @@ create table if not exists appointments (
   pregnancy_status text,
 
   -- deposit (informational — not required to complete a booking)
-  payment_reference text
+  payment_account text, -- which of your accounts (e.g. "CRDB", "Lipa M-PESA") they picked
+  payment_sender_name text -- name that will show on your payment notification
 );
 
 -- Prevents two bookings from ever holding the same slot, even under a race

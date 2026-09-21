@@ -1,8 +1,7 @@
-// Edit these with your real deposit amount and accounts before going live.
 // The deposit is shown as informational — booking submission is never
 // blocked on it.
 
-export const DEPOSIT_AMOUNT_TZS = 30000; // TODO: set your real flat deposit amount
+export const DEPOSIT_AMOUNT_TZS = 30000;
 
 export type PaymentAccount = {
   provider: string; // e.g. "CRDB", "M-PESA"
@@ -12,8 +11,18 @@ export type PaymentAccount = {
 
 export const PAYMENT_ACCOUNTS: PaymentAccount[] = [
   {
-    provider: "Add your bank/provider",
-    accountName: "Add your account name",
-    accountNumber: "0000000000",
+    provider: "CRDB",
+    accountName: "Suzana Tryphone Ruhogora",
+    accountNumber: "0152610572400",
+  },
+  {
+    provider: "NMB",
+    accountName: "Suzana Tryphon Ruhogora",
+    accountNumber: "33710028035",
+  },
+  {
+    provider: "Lipa M-PESA",
+    accountName: "Heaven Aesthetics",
+    accountNumber: "352329602",
   },
 ];

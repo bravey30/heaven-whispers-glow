@@ -49,9 +49,10 @@ export function AppointmentDetailSheet({
                 <Row label="Pregnant / breastfeeding" value={appointment.pregnancy_status} />
               </DetailSection>
 
-              {appointment.payment_reference && (
+              {(appointment.payment_account || appointment.payment_sender_name) && (
                 <DetailSection title="Payment">
-                  <Row label="Reference" value={appointment.payment_reference} />
+                  <Row label="Paid to" value={appointment.payment_account} />
+                  <Row label="Sender name" value={appointment.payment_sender_name} />
                 </DetailSection>
               )}
 

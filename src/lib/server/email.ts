@@ -61,7 +61,8 @@ function summaryLines(appt: Appointment): string {
     ["Current medication", appt.current_medication],
     ["Pregnant / breastfeeding", appt.pregnancy_status],
     ["", ""],
-    ["Payment reference", appt.payment_reference],
+    ["Paid to", appt.payment_account],
+    ["Sender name", appt.payment_sender_name],
     ["Notes", appt.notes],
   ];
 
