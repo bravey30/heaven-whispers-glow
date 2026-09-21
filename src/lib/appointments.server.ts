@@ -7,6 +7,25 @@ import { renderAppointmentPdf } from "./server/pdf";
 import { sendAdminNotification, sendCustomerConfirmation } from "./server/email";
 import { requireAdminSession } from "./server/session";
 
+// Nodemailer opens a fresh connection per send (no pooling), so a one-off DNS
+// hiccup on the SMTP host shouldn't mean the admin never hears about a
+// booking. A couple of quick retries covers that without masking a real
+// config problem (which will still fail all three attempts and get logged).
+async function withRetry<T>(fn: () => Promise<T>, attempts = 3, delayMs = 750): Promise<T> {
+  let lastError: unknown;
+  for (let attempt = 0; attempt < attempts; attempt++) {
+    try {
+      return await fn();
+    } catch (err) {
+      lastError = err;
+      if (attempt < attempts - 1) {
+        await new Promise((resolve) => setTimeout(resolve, delayMs));
+      }
+    }
+  }
+  throw lastError;
+}
+
 export const getBookedSlotsForDate = createServerFn({ method: "GET" })
   .validator((input: unknown) =>
     z.object({ date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/) }).parse(input),
@@ -70,15 +89,17 @@ export const submitAppointment = createServerFn({ method: "POST" })
     // The booking is already saved — a bad SMTP password or a PDF hiccup
     // must never turn a successful booking into an error for the customer.
     try {
-      const pdfBuffer = await renderAppointmentPdf(appointment);
-      await sendAdminNotification(appointment, pdfBuffer);
+      await withRetry(async () => {
+        const pdfBuffer = await renderAppointmentPdf(appointment);
+        await sendAdminNotification(appointment, pdfBuffer);
+      });
     } catch (err) {
-      console.error("Failed to send admin notification email:", err);
+      console.error("Failed to send admin notification email after retries:", err);
     }
     try {
-      await sendCustomerConfirmation(appointment);
+      await withRetry(() => sendCustomerConfirmation(appointment));
     } catch (err) {
-      console.error("Failed to send customer confirmation email:", err);
+      console.error("Failed to send customer confirmation email after retries:", err);
     }
 
     return { ok: true as const, appointment };
