@@ -24,6 +24,7 @@ async function withRetry<T>(fn: () => Promise<T>, attempts = 3, delayMs = 750): 
     }
   }
   throw lastError;
+  
 }
 
 export const getBookedSlotsForDate = createServerFn({ method: "GET" })
