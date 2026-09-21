@@ -24,7 +24,6 @@ async function withRetry<T>(fn: () => Promise<T>, attempts = 3, delayMs = 750): 
     }
   }
   throw lastError;
-  
 }
 
 export const getBookedSlotsForDate = createServerFn({ method: "GET" })
@@ -89,11 +88,14 @@ export const submitAppointment = createServerFn({ method: "POST" })
 
     // The booking is already saved — a bad SMTP password or a PDF hiccup
     // must never turn a successful booking into an error for the customer.
+    let pdfBuffer: Buffer | undefined;
     try {
-      await withRetry(async () => {
-        const pdfBuffer = await renderAppointmentPdf(appointment);
-        await sendAdminNotification(appointment, pdfBuffer);
-      });
+      pdfBuffer = await renderAppointmentPdf(appointment);
+    } catch (err) {
+      console.error("Failed to render appointment PDF (notification will send without it):", err);
+    }
+    try {
+      await withRetry(() => sendAdminNotification(appointment, pdfBuffer));
     } catch (err) {
       console.error("Failed to send admin notification email after retries:", err);
     }

@@ -24,6 +24,22 @@ function fromAddress() {
   return process.env["SMTP_FROM"] || process.env["SMTP_USER"] || "";
 }
 
+// Prefers an explicit SITE_URL (set this if you're on a custom domain).
+// Falls back to Vercel's own auto-provided env vars so this works with zero
+// extra setup on a default *.vercel.app deployment.
+function getSiteUrl(): string | undefined {
+  const explicit = process.env["SITE_URL"];
+  if (explicit) return explicit.replace(/\/$/, "");
+
+  const vercelProductionUrl = process.env["VERCEL_PROJECT_PRODUCTION_URL"];
+  if (vercelProductionUrl) return `https://${vercelProductionUrl}`;
+
+  const vercelUrl = process.env["VERCEL_URL"];
+  if (vercelUrl) return `https://${vercelUrl}`;
+
+  return undefined;
+}
+
 function summaryLines(appt: Appointment): string {
   const lines: [string, string | number | null | undefined][] = [
     ["Treatment", appt.service_name],
@@ -56,11 +72,14 @@ export async function sendAdminNotification(appt: Appointment, pdfBuffer?: Buffe
   const adminEmail = process.env["ADMIN_EMAIL"] || process.env["SMTP_USER"];
   if (!adminEmail) return;
 
+  const siteUrl = getSiteUrl();
+  const dashboardLink = siteUrl ? `\nView in dashboard: ${siteUrl}/admin\n` : "";
+
   await getTransporter().sendMail({
     from: fromAddress(),
     to: adminEmail,
     subject: `New appointment — ${appt.full_name} — ${appt.appointment_date} ${appt.appointment_time}`,
-    text: `A new appointment was booked on the website.\n\n${summaryLines(appt)}`,
+    text: `A new appointment was booked on the website.\n${dashboardLink}\n${summaryLines(appt)}`,
     attachments: pdfBuffer
       ? [{ filename: `appointment-${appt.id}.pdf`, content: pdfBuffer }]
       : undefined,
