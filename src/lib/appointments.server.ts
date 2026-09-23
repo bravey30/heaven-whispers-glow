@@ -109,6 +109,14 @@ export const submitAppointment = createServerFn({ method: "POST" })
     return { ok: true as const, appointment };
   });
 
+export const appointmentSortFields = [
+  "appointment_date",
+  "created_at",
+  "full_name",
+  "status",
+] as const;
+export type AppointmentSortField = (typeof appointmentSortFields)[number];
+
 export const listAppointments = createServerFn({ method: "GET" })
   .validator((input: unknown) =>
     z
@@ -116,6 +124,8 @@ export const listAppointments = createServerFn({ method: "GET" })
         status: z.enum(appointmentStatuses).optional(),
         from: z.string().optional(),
         to: z.string().optional(),
+        sortBy: z.enum(appointmentSortFields).optional(),
+        sortDir: z.enum(["asc", "desc"]).optional(),
       })
       .parse(input ?? {}),
   )
@@ -123,11 +133,18 @@ export const listAppointments = createServerFn({ method: "GET" })
     await requireAdminSession();
 
     const supabase = getSupabaseAdmin();
-    let query = supabase
-      .from("appointments")
-      .select("*")
-      .order("appointment_date", { ascending: false })
-      .order("appointment_time", { ascending: false });
+    let query = supabase.from("appointments").select("*");
+
+    const sortBy = data.sortBy ?? "appointment_date";
+    const ascending = data.sortDir === "asc";
+
+    if (sortBy === "appointment_date") {
+      query = query
+        .order("appointment_date", { ascending })
+        .order("appointment_time", { ascending });
+    } else {
+      query = query.order(sortBy, { ascending });
+    }
 
     if (data.status) query = query.eq("status", data.status);
     if (data.from) query = query.gte("appointment_date", data.from);
