@@ -24,7 +24,7 @@ export function AppointmentDetailSheet({
               <SheetTitle>{appointment.full_name}</SheetTitle>
               <SheetDescription>
                 {appointment.service_name} — {appointment.appointment_date} at{" "}
-                {appointment.appointment_time}
+                {appointment.appointment_time} ({appointment.duration_minutes} min)
               </SheetDescription>
             </SheetHeader>
 

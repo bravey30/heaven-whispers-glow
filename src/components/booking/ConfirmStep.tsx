@@ -1,4 +1,4 @@
-import { treatments } from "@/lib/heaven";
+import { serviceDuration, treatments } from "@/lib/heaven";
 import type { BookingInput } from "@/lib/booking-schema";
 
 export function ConfirmStep({ values }: { values: BookingInput }) {
@@ -10,6 +10,7 @@ export function ConfirmStep({ values }: { values: BookingInput }) {
         <SummaryRow label="Service" value={treatment?.name} />
         <SummaryRow label="Date" value={values.appointmentDate} />
         <SummaryRow label="Time" value={values.appointmentTime} />
+        <SummaryRow label="Duration" value={treatment && `${serviceDuration(treatment)} min`} />
         <SummaryRow label="Price" value={treatment?.price} accent />
       </div>
       <div className="border border-border p-6">

@@ -7,17 +7,61 @@ export const pregnancyStatuses = ["yes", "no", "not-applicable"] as const;
 export type PregnancyStatus = (typeof pregnancyStatuses)[number];
 
 // Mon–Sat, 09:00–19:00 — matches the hours already published on /contact.
-// v1 gives every appointment a fixed 1-hour slot regardless of treatment
-// (the catalog doesn't record real per-treatment durations for most services).
 export const BUSINESS_HOURS = { openHour: 9, closeHour: 19 };
 export const CLOSED_WEEKDAY = 0; // date-fns getDay(): 0 = Sunday
 
-export function generateTimeSlots(): string[] {
+// Scheduling rules. BUFFER_MINUTES and SERVERS_PER_SERVICE are also enforced
+// by the enforce_appointment_capacity() trigger in supabase/schema.sql —
+// change both together.
+export const SLOT_INTERVAL_MINUTES = 30; // how often a start time is offered
+export const BUFFER_MINUTES = 5; // turnover time added after every treatment
+export const SERVERS_PER_SERVICE = 2; // bookings of one service that may overlap
+
+export function toMinutes(hhmm: string): number {
+  const [h, m] = hhmm.split(":").map(Number);
+  return h! * 60 + m!;
+}
+
+function fromMinutes(total: number): string {
+  return `${String(Math.floor(total / 60)).padStart(2, "0")}:${String(total % 60).padStart(2, "0")}`;
+}
+
+/** Start times at which a treatment of this length finishes by closing time. */
+export function generateTimeSlots(durationMinutes: number): string[] {
   const slots: string[] = [];
-  for (let hour = BUSINESS_HOURS.openHour; hour < BUSINESS_HOURS.closeHour; hour++) {
-    slots.push(`${String(hour).padStart(2, "0")}:00`);
+  const close = BUSINESS_HOURS.closeHour * 60;
+  for (
+    let start = BUSINESS_HOURS.openHour * 60;
+    start + durationMinutes <= close;
+    start += SLOT_INTERVAL_MINUTES
+  ) {
+    slots.push(fromMinutes(start));
   }
   return slots;
+}
+
+export type BookedBlock = { time: string; durationMinutes: number };
+
+/**
+ * True when fewer than SERVERS_PER_SERVICE existing bookings are running at
+ * any moment of the new booking (each booking holds its duration + buffer).
+ * `existing` must already be limited to the same service and date.
+ */
+export function hasCapacity(time: string, durationMinutes: number, existing: BookedBlock[]): boolean {
+  const start = toMinutes(time);
+  const end = start + durationMinutes + BUFFER_MINUTES;
+  const overlapping = existing
+    .map((b) => {
+      const s = toMinutes(b.time);
+      return { s, e: s + b.durationMinutes + BUFFER_MINUTES };
+    })
+    .filter((b) => b.s < end && start < b.e);
+
+  // Peak concurrency is reached at the new start or at some booking's start.
+  const points = [start, ...overlapping.map((b) => b.s).filter((s) => s > start)];
+  return points.every(
+    (p) => overlapping.filter((b) => b.s <= p && p < b.e).length < SERVERS_PER_SERVICE,
+  );
 }
 
 export const bookingSchema = z.object({
@@ -63,6 +107,7 @@ export type Appointment = {
   service_price: string;
   appointment_date: string;
   appointment_time: string;
+  duration_minutes: number;
   full_name: string;
   phone: string;
   email: string | null;

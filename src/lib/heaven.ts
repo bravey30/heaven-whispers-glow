@@ -8,7 +8,16 @@ export type Treatment = {
   includes: string[];
   idealFor: string[];
   goals: string[];
+  /** Treatment length in minutes. Omit to use DEFAULT_DURATION_MINUTES. */
+  durationMinutes?: number;
 };
+
+// Used for any service whose real length we don't know yet.
+export const DEFAULT_DURATION_MINUTES = 60;
+
+export function serviceDuration(t: Pick<Treatment, "durationMinutes">): number {
+  return t.durationMinutes ?? DEFAULT_DURATION_MINUTES;
+}
 
 export const treatments: Treatment[] = [
   {
@@ -37,6 +46,7 @@ export const treatments: Treatment[] = [
   },
   {
     slug: "firming-peptide-facial",
+    durationMinutes: 60,
     name: "Firming Peptide Facial",
     signature: "The Luxe Lift",
     price: "200,000 TZS",
@@ -49,6 +59,7 @@ export const treatments: Treatment[] = [
   },
   {
     slug: "c2o2-acne-facial",
+    durationMinutes: 40,
     name: "C2O2 Acne Facial Treatment",
     signature: "C2O2",
     price: "280,000 TZS",
@@ -85,6 +96,7 @@ export const treatments: Treatment[] = [
   },
   {
     slug: "dermafrost-peel",
+    durationMinutes: 30,
     name: "DermaFrost Salicylic Acid Peel",
     signature: "DermaFrost",
     price: "300,000 TZS",
@@ -97,6 +109,7 @@ export const treatments: Treatment[] = [
   },
   {
     slug: "mandeliclear-peel",
+    durationMinutes: 35,
     name: "MandeliClear with Vitamin A Accelerator Peel",
     signature: "MandeliClear",
     price: "350,000 TZS",
@@ -121,6 +134,7 @@ export const treatments: Treatment[] = [
   },
   {
     slug: "swich-anti-aging",
+    durationMinutes: 70,
     name: "SWICH Dermal Rejuvenation System",
     signature: "SWICH Anti-Aging Treatment",
     price: "300,000 TZS",
@@ -283,6 +297,94 @@ export const treatments: Treatment[] = [
     idealFor: ["Smoothness", "Everyday definition"],
     goals: ["unsure"],
   },
+  {
+    slug: "leg-wax",
+    name: "Leg Wax",
+    signature: "Leg Wax",
+    price: "20,000 TZS",
+    category: "body",
+    summary: "A leg waxing treatment for smooth, hair-free skin.",
+    includes: ["Skin preparation", "Waxing pass", "Soothing post-wax finish"],
+    idealFor: ["Smoothness", "Hair removal"],
+    goals: ["unsure"],
+  },
+  {
+    slug: "full-body-massage",
+    name: "Full Body Massage",
+    signature: "Full Body Massage",
+    price: "85,000 TZS",
+    category: "body",
+    summary: "A full body massage working the upper and lower body to release tension and restore calm.",
+    includes: ["Upper body massage", "Lower body massage"],
+    idealFor: ["Relaxation", "Muscle tension", "Stress relief"],
+    goals: ["relaxation"],
+  },
+  {
+    slug: "massage-dry-cupping",
+    name: "Massage + Dry Cupping",
+    signature: "Massage & Dry Cupping",
+    price: "160,000 TZS",
+    category: "body",
+    summary: "A full body massage combined with dry cupping to ease deep muscle tension and boost circulation.",
+    includes: ["Full body massage", "Dry cupping"],
+    idealFor: ["Muscle tension", "Circulation", "Relaxation"],
+    goals: ["relaxation"],
+  },
+  {
+    slug: "massage-body-sculpting",
+    name: "Massage + Body Sculpting",
+    signature: "Massage & Body Sculpting",
+    price: "130,000 TZS",
+    category: "body",
+    summary: "A full body massage paired with body sculpting techniques to contour and tone.",
+    includes: ["Full body massage", "Body sculpting"],
+    idealFor: ["Body contouring", "Toning", "Relaxation"],
+    goals: ["relaxation"],
+  },
+  {
+    slug: "massage-hot-stone",
+    name: "Massage + Hot Stone",
+    signature: "Hot Stone Massage",
+    price: "110,000 TZS",
+    category: "body",
+    summary: "A full body massage with hot stone therapy, using gentle heat to melt away stiffness.",
+    includes: ["Full body massage", "Hot stone therapy"],
+    idealFor: ["Deep relaxation", "Muscle stiffness", "Stress relief"],
+    goals: ["relaxation"],
+  },
+  {
+    slug: "hijama-upper-body",
+    name: "Wet Cupping (Hijama) — Upper Body",
+    signature: "Hijama · Upper Body",
+    price: "200,000 TZS",
+    category: "body",
+    summary: "Wet cupping (hijama) for the back, shoulders and neck.",
+    includes: ["Back", "Shoulders", "Neck"],
+    idealFor: ["Back & neck tension", "Circulation", "Wellness"],
+    goals: ["relaxation"],
+  },
+  {
+    slug: "hijama-lower-body",
+    name: "Wet Cupping (Hijama) — Lower Body",
+    signature: "Hijama · Lower Body",
+    price: "150,000 TZS",
+    category: "body",
+    summary: "Wet cupping (hijama) for the legs and feet.",
+    includes: ["Legs", "Feet"],
+    idealFor: ["Leg fatigue", "Circulation", "Wellness"],
+    goals: ["relaxation"],
+  },
+  {
+    slug: "hijama-full-body",
+    name: "Wet Cupping (Hijama) — Upper + Lower Body",
+    signature: "Hijama · Full Body",
+    price: "300,000 TZS",
+    category: "body",
+    summary: "Full body wet cupping (hijama), covering the upper and lower body.",
+    includes: ["Back, shoulders & neck", "Legs & feet"],
+    idealFor: ["Full body wellness", "Circulation", "Muscle tension"],
+    goals: ["relaxation"],
+  },
 ];
 
 export const categories = [
@@ -304,7 +406,7 @@ export const categories = [
   {
     key: "body",
     label: "Body",
-    sub: "Body Care",
+    sub: "Body Care, Massage & Cupping",
   },
 ] as const;
 

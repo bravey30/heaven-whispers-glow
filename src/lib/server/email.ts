@@ -46,6 +46,7 @@ function summaryLines(appt: Appointment): string {
     ["Price", appt.service_price],
     ["Date", appt.appointment_date],
     ["Time", appt.appointment_time],
+    ["Duration", `${appt.duration_minutes} min`],
     ["", ""],
     ["Full name", appt.full_name],
     ["Phone", appt.phone],
@@ -100,7 +101,7 @@ Thank you for booking with Heaven Aesthetics. Here's what we have on file:
 
 Treatment: ${appt.service_name}
 Date: ${appt.appointment_date}
-Time: ${appt.appointment_time}
+Time: ${appt.appointment_time} (about ${appt.duration_minutes} min)
 
 We'll be in touch if we need anything else before your visit. See you soon!
 

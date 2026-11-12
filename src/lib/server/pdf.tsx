@@ -53,6 +53,7 @@ function AppointmentDocument({ appt }: { appt: Appointment }) {
           <Row label="Price" value={appt.service_price} />
           <Row label="Date" value={appt.appointment_date} />
           <Row label="Time" value={appt.appointment_time} />
+          <Row label="Duration" value={`${appt.duration_minutes} min`} />
           <Row label="Status" value={appt.status} />
         </View>
 

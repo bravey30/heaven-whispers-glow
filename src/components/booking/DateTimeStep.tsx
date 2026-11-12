@@ -1,18 +1,21 @@
 import { useQuery } from "@tanstack/react-query";
 import { addDays, format, isBefore, isSameDay, startOfDay } from "date-fns";
 import { Calendar } from "@/components/ui/calendar";
-import { BUSINESS_HOURS, CLOSED_WEEKDAY, generateTimeSlots } from "@/lib/booking-schema";
-import { getBookedSlotsForDate } from "@/lib/appointments.server";
+import { BUSINESS_HOURS, CLOSED_WEEKDAY } from "@/lib/booking-schema";
+import { getAvailableSlots } from "@/lib/appointments.server";
+import { serviceDuration, treatments } from "@/lib/heaven";
 import { cn } from "@/lib/utils";
 
 const MAX_BOOKING_WINDOW_DAYS = 60;
 
 export function DateTimeStep({
+  serviceSlug,
   date,
   time,
   onChangeDate,
   onChangeTime,
 }: {
+  serviceSlug: string;
   date: Date | undefined;
   time: string | null;
   onChangeDate: (date: Date | undefined) => void;
@@ -20,15 +23,16 @@ export function DateTimeStep({
 }) {
   const dateKey = date ? format(date, "yyyy-MM-dd") : undefined;
 
-  const { data: bookedSlots = [], isFetching } = useQuery({
-    queryKey: ["booked-slots", dateKey],
-    queryFn: () => getBookedSlotsForDate({ data: { date: dateKey! } }),
-    enabled: !!dateKey,
+  const treatment = treatments.find((t) => t.slug === serviceSlug);
+
+  const { data: slots = [], isFetching } = useQuery({
+    queryKey: ["available-slots", serviceSlug, dateKey],
+    queryFn: () => getAvailableSlots({ data: { date: dateKey!, serviceSlug } }),
+    enabled: !!dateKey && !!serviceSlug,
   });
 
   const today = startOfDay(new Date());
   const maxDate = addDays(today, MAX_BOOKING_WINDOW_DAYS);
-  const slots = generateTimeSlots();
 
   return (
     <div className="grid gap-10 md:grid-cols-2">
@@ -51,16 +55,20 @@ export function DateTimeStep({
 
       <div>
         <p className="eyebrow mb-4">Choose a time</p>
+        {treatment && (
+          <p className="mb-4 text-xs text-muted-foreground">
+            {treatment.name} · about {serviceDuration(treatment)} min
+          </p>
+        )}
         {!date && (
           <p className="text-sm text-muted-foreground">Pick a date to see available times.</p>
         )}
         {date && (
           <div className="grid grid-cols-3 gap-2">
-            {slots.map((slot) => {
+            {slots.map(({ time: slot, available }) => {
               const slotDateTime = new Date(`${dateKey}T${slot}:00`);
               const isPast = isSameDay(date, today) && isBefore(slotDateTime, new Date());
-              const isTaken = bookedSlots.includes(slot);
-              const disabled = isPast || isTaken;
+              const disabled = isPast || !available;
               const selected = time === slot;
 
               return (

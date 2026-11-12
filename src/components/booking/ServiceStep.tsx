@@ -1,5 +1,5 @@
 import { useMemo, useState, type ReactNode } from "react";
-import { categories, treatments } from "@/lib/heaven";
+import { categories, serviceDuration, treatments } from "@/lib/heaven";
 import { cn } from "@/lib/utils";
 
 export function ServiceStep({
@@ -64,7 +64,12 @@ export function ServiceStep({
                 {t.summary}
               </span>
             </span>
-            <span className="shrink-0 text-sm font-semibold text-gold">{t.price}</span>
+            <span className="shrink-0 text-right">
+              <span className="block text-sm font-semibold text-gold">{t.price}</span>
+              <span className="mt-1 block text-xs text-muted-foreground">
+                {serviceDuration(t)} min
+              </span>
+            </span>
           </button>
         ))}
         {filtered.length === 0 && (

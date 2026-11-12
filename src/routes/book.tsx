@@ -127,12 +127,18 @@ function BookPage() {
           {step === 1 && (
             <ServiceStep
               selectedSlug={values.serviceSlug || null}
-              onSelect={(slug) => form.setValue("serviceSlug", slug, { shouldValidate: true })}
+              onSelect={(slug) => {
+                // Availability depends on the service, so a time picked for a
+                // different treatment no longer applies.
+                if (slug !== values.serviceSlug) form.setValue("appointmentTime", "");
+                form.setValue("serviceSlug", slug, { shouldValidate: true });
+              }}
             />
           )}
 
           {step === 2 && (
             <DateTimeStep
+              serviceSlug={values.serviceSlug}
               date={selectedDate}
               time={values.appointmentTime || null}
               onChangeDate={(date) => {

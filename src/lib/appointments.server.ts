@@ -1,7 +1,14 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
-import { treatments } from "@/lib/heaven";
-import { appointmentStatuses, bookingSchema, type Appointment } from "@/lib/booking-schema";
+import { serviceDuration, treatments } from "@/lib/heaven";
+import {
+  appointmentStatuses,
+  bookingSchema,
+  generateTimeSlots,
+  hasCapacity,
+  type Appointment,
+  type BookedBlock,
+} from "@/lib/booking-schema";
 import { getSupabaseAdmin } from "./server/supabase";
 import { renderAppointmentPdf } from "./server/pdf";
 import { sendAdminNotification, sendCustomerConfirmation } from "./server/email";
@@ -22,24 +29,43 @@ async function withRetry<T>(fn: () => Promise<T>, attempts = 3, delayMs = 750): 
         await new Promise((resolve) => setTimeout(resolve, delayMs));
       }
     }
+    
   }
   throw lastError;
 }
 
-export const getBookedSlotsForDate = createServerFn({ method: "GET" })
+async function getBookedBlocks(serviceSlug: string, date: string): Promise<BookedBlock[]> {
+  const supabase = getSupabaseAdmin();
+  const { data: rows, error } = await supabase
+    .from("appointments")
+    .select("appointment_time, duration_minutes")
+    .eq("service_slug", serviceSlug)
+    .eq("appointment_date", date)
+    .neq("status", "cancelled");
+
+  if (error) throw new Error(error.message);
+  return (rows ?? []).map((row) => ({
+    time: row.appointment_time as string,
+    durationMinutes: row.duration_minutes as number,
+  }));
+}
+
+export const getAvailableSlots = createServerFn({ method: "GET" })
   .validator((input: unknown) =>
-    z.object({ date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/) }).parse(input),
+    z
+      .object({ date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/), serviceSlug: z.string().min(1) })
+      .parse(input),
   )
   .handler(async ({ data }) => {
-    const supabase = getSupabaseAdmin();
-    const { data: rows, error } = await supabase
-      .from("appointments")
-      .select("appointment_time")
-      .eq("appointment_date", data.date)
-      .neq("status", "cancelled");
+    const treatment = treatments.find((t) => t.slug === data.serviceSlug);
+    if (!treatment) throw new Error("Unknown service.");
 
-    if (error) throw new Error(error.message);
-    return (rows ?? []).map((row) => row.appointment_time as string);
+    const duration = serviceDuration(treatment);
+    const booked = await getBookedBlocks(treatment.slug, data.date);
+    return generateTimeSlots(duration).map((time) => ({
+      time,
+      available: hasCapacity(time, duration, booked),
+    }));
   });
 
 export const submitAppointment = createServerFn({ method: "POST" })
@@ -47,6 +73,11 @@ export const submitAppointment = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     const treatment = treatments.find((t) => t.slug === data.serviceSlug);
     if (!treatment) throw new Error("Unknown service.");
+
+    const duration = serviceDuration(treatment);
+    if (!generateTimeSlots(duration).includes(data.appointmentTime)) {
+      throw new Error("That start time isn't available for this treatment.");
+    }
 
     const supabase = getSupabaseAdmin();
     const { data: row, error } = await supabase
@@ -57,6 +88,7 @@ export const submitAppointment = createServerFn({ method: "POST" })
         service_price: treatment.price,
         appointment_date: data.appointmentDate,
         appointment_time: data.appointmentTime,
+        duration_minutes: duration,
         full_name: data.fullName,
         phone: data.phone,
         email: data.email ?? null,
@@ -77,9 +109,9 @@ export const submitAppointment = createServerFn({ method: "POST" })
       .single();
 
     if (error) {
-      // Unique violation on (appointment_date, appointment_time) — someone
-      // else just took this slot.
-      if (error.code === "23505") {
+      // Raised by the enforce_appointment_capacity() trigger when every
+      // server for this service is already booked at that time.
+      if (error.code === "23P01") {
         return { ok: false as const, reason: "slot_taken" as const };
       }
       throw new Error(error.message);
